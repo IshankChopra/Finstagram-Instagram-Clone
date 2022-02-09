@@ -35,7 +35,7 @@ const Header = () => {
         <TouchableOpacity>
           <View style={styles.unreadBadge}>
             <Text>
-              <Text style={styles.unreadBadgeText}>11</Text>
+              <Text style={styles.unreadBadgeText}>5</Text>
             </Text>
           </View>
           <Image
