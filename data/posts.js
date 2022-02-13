@@ -15,7 +15,7 @@ export const POSTS = [
       },
       {
         user: "chopra",
-        comment: "lovely cat",
+        caption: "lovely cat",
       },
     ],
   },
