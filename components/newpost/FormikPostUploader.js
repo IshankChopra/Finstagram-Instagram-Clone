@@ -40,7 +40,7 @@ const FormikPostUploader = () => {
             }}
           >
             <Image
-              source={{ uri: PlaceHolderImage }}
+              source={{ uri: thumbnailUrl ? thumbnailUrl : PlaceHolderImage }}
               style={{ height: 100, width: 100 }}
             />
             <View style={{ flex: 1, marginLeft: 12 }}>
@@ -57,6 +57,7 @@ const FormikPostUploader = () => {
           </View>
           <Divider orientation="vertical" width={0.2} />
           <TextInput
+            onChange={(e) => setThumbnailUrl(e.nativeEvent.text)}
             style={{ color: "white", fontSize: 18 }}
             placeholder="Enter Image URL"
             placeholderTextColor="gray"
