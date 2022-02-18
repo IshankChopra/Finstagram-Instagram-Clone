@@ -1,5 +1,6 @@
 import { View, Image, StyleSheet } from "react-native";
 import React from "react";
+import LoginForm from "../components/loginScreen/LoginForm";
 
 const Instagram_Logo =
   "https://cdn2.iconfinder.com/data/icons/social-media-2285/512/1_Instagram_colored_svg_1-512.png";
@@ -13,6 +14,7 @@ const LoginScreen = () => {
           style={{ height: 100, width: 100 }}
         />
       </View>
+      <LoginForm />
     </View>
   );
 };
