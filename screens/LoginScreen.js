@@ -5,7 +5,7 @@ import LoginForm from "../components/loginScreen/LoginForm";
 const Instagram_Logo =
   "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Instagram_logo.svg/1200px-Instagram_logo.svg.png";
 
-const LoginScreen = () => {
+const LoginScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <View style={styles.logoContainer}>
@@ -14,7 +14,7 @@ const LoginScreen = () => {
           style={{ height: 100, width: 300 }}
         />
       </View>
-      <LoginForm />
+      <LoginForm navigation={navigation} />
     </View>
   );
 };

@@ -9,7 +9,7 @@ import Validator from "email-validator";
 import { Divider } from "react-native-elements";
 import { color } from "react-native-elements/dist/helpers";
 
-const LoginForm = () => {
+const LoginForm = ({ navigation }) => {
   const LoginFormSchema = Yup.object().shape({
     email: Yup.string().email().required("An email is required"),
     password: Yup.string()
@@ -136,12 +136,14 @@ const LoginForm = () => {
               </View>
             </View>
 
-            <View style={{ alignItems: "flex-end", marginTop: 150 }}>
+            <View style={{ alignItems: "flex-end", marginTop: 100 }}>
               <Divider width={1} orientation="vertical" />
 
               <View style={styles.signupContainer}>
                 <Text>Don't have an account? </Text>
-                <TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => navigation.push("SignupScreen")}
+                >
                   <Text style={{ color: "#6BB0F5" }}>Sign up</Text>
                 </TouchableOpacity>
               </View>
