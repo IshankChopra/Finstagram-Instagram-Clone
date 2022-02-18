@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Pressable, Image } from "react-native";
+import { View, Text, StyleSheet, Pressable } from "react-native";
 import React from "react";
 import { TextInput } from "react-native";
 import { TouchableOpacity } from "react-native";
@@ -6,12 +6,11 @@ import { TouchableOpacity } from "react-native";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import Validator from "email-validator";
-import { Divider } from "react-native-elements";
-import { color } from "react-native-elements/dist/helpers";
 
-const LoginForm = () => {
-  const LoginFormSchema = Yup.object().shape({
+const signupForm = () => {
+  const signupFormSchema = Yup.object().shape({
     email: Yup.string().email().required("An email is required"),
+    username: Yup.string().required().min(2, "A usernae is required"),
     password: Yup.string()
       .required()
       .min(6, "Your password has to be atleast  characters"),
@@ -19,11 +18,11 @@ const LoginForm = () => {
   return (
     <View style={styles.wrapper}>
       <Formik
-        initialValues={{ email: "", password: "" }}
+        initialValues={{ email: "", username: "", password: "" }}
         onSubmit={(values) => {
           console.log(values);
         }}
-        validationSchema={LoginFormSchema}
+        validationSchema={signupFormSchema}
         validateOnMount={true}
       >
         {({ handleChange, handleBlur, handleSubmit, values, isValid }) => (
@@ -40,15 +39,36 @@ const LoginForm = () => {
               ]}
             >
               <TextInput
-                placeholder="Phone number,username or email"
+                placeholder="Email"
                 placeholderTextColor="#444"
                 autoCapitalize="none"
                 keyboardType="email-address"
-                textContentType="emailAddress"
                 autoFocus={true}
                 onChangeText={handleChange("email")}
                 onBlur={handleBlur("email")}
                 value={values.email}
+              />
+            </View>
+
+            <View
+              style={[
+                styles.inputField,
+                {
+                  borderColor:
+                    1 > values.username.length || values.username.length >= 2
+                      ? "#ccc"
+                      : "red",
+                },
+              ]}
+            >
+              <TextInput
+                placeholder="Username"
+                placeholderTextColor="#444"
+                autoCapitalize="none"
+                textContentType="username"
+                onChangeText={handleChange("username")}
+                onBlur={handleBlur("username")}
+                value={values.username}
               />
             </View>
 
@@ -67,7 +87,6 @@ const LoginForm = () => {
                 placeholder="Password"
                 placeholderTextColor="#444"
                 autoCapitalize="none"
-                autoCorrect={false}
                 secureTextEntry={true}
                 textContentType="password"
                 onChangeText={handleChange("password")}
@@ -75,76 +94,21 @@ const LoginForm = () => {
                 value={values.password}
               />
             </View>
-            <View style={{ alignItems: "flex-end", marginBottom: 30 }}>
-              {/* <Text style={{ color: "#6BB0F5" }}>Forgot password?</Text> */}
-            </View>
+            <View style={{ alignItems: "flex-end", marginBottom: 30 }}></View>
 
             <Pressable
               titleSize={20}
               style={styles.button(isValid)}
               onPress={handleSubmit}
             >
-              <Text style={styles.buttonText}>Log In</Text>
+              <Text style={styles.buttonText}>Sign Up</Text>
             </Pressable>
 
-            <View>
-              <View
-                style={{
-                  flexDirection: "row",
-                  justifyContent: "center",
-                  marginTop: 20,
-                }}
-              >
-                <Text style={{ color: "gray" }}>
-                  Forgot your login details?{" "}
-                </Text>
-                <Text style={{ color: "#6BB0F5", fontWeight: "500" }}>
-                  Get help logging in.
-                </Text>
-              </View>
-
-              <View style={{ alignItems: "center", marginTop: 15 }}>
-                <Text style={{ color: "gray", fontWeight: "500" }}>OR</Text>
-              </View>
-
-              <View
-                style={{
-                  flexDirection: "row",
-                  justifyContent: "center",
-                  marginTop: 20,
-                }}
-              >
-                <Image
-                  source={{
-                    uri: "https://upload.wikimedia.org/wikipedia/en/thumb/0/04/Facebook_f_logo_%282021%29.svg/512px-Facebook_f_logo_%282021%29.svg.png?20210818083032",
-                  }}
-                  style={{
-                    height: 30,
-                    width: 30,
-                  }}
-                />
-                <Text
-                  style={{
-                    alignSelf: "center",
-                    color: "#3f729b",
-                    fontWeight: "700",
-                    marginLeft: 10,
-                  }}
-                >
-                  Log in with Facebook
-                </Text>
-              </View>
-            </View>
-
-            <View style={{ alignItems: "flex-end", marginTop: 150 }}>
-              <Divider width={1} orientation="vertical" />
-
-              <View style={styles.signupContainer}>
-                <Text>Don't have an account? </Text>
-                <TouchableOpacity>
-                  <Text style={{ color: "#6BB0F5" }}>Sign up</Text>
-                </TouchableOpacity>
-              </View>
+            <View style={styles.loginContainer}>
+              <Text>Already have an account? </Text>
+              <TouchableOpacity>
+                <Text style={{ color: "#6BB0F5" }}>Sign up</Text>
+              </TouchableOpacity>
             </View>
           </>
         )}
@@ -153,7 +117,7 @@ const LoginForm = () => {
   );
 };
 
-export default LoginForm;
+export default signupForm;
 
 const styles = StyleSheet.create({
   wrapper: {
@@ -178,10 +142,10 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 20,
   },
-  signupContainer: {
+  loginContainer: {
     flexDirection: "row",
     width: "100%",
     justifyContent: "center",
-    marginTop: 20,
+    marginTop: 50,
   },
 });
