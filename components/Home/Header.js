@@ -3,11 +3,21 @@ import React from "react";
 import { Image } from "react-native";
 import { TouchableOpacity } from "react-native";
 import { color } from "react-native/Libraries/Components/View/ReactNativeStyleAttributes";
+import { firebase } from "../../firebase";
+
+const handleSignout = async () => {
+  try {
+    await firebase.auth().signOut();
+    console.log("signed out successfully");
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 const Header = ({ navigation }) => {
   return (
     <View style={styles.container}>
-      <TouchableOpacity>
+      <TouchableOpacity onPress={handleSignout}>
         <Image
           style={styles.logo}
           source={require("../../assets/header-logo.png")}
