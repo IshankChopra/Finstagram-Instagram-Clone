@@ -1,13 +1,15 @@
 import { View, Text, Image, StyleSheet } from "react-native";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Divider } from "react-native-elements";
 import { TouchableOpacity } from "react-native";
+import { firebase, db } from "../../firebase";
 
 const postFotterIcons = [
   {
     name: "Like",
     imageUrl:
       "https://img.icons8.com/fluency-systems-regular/60/ffffff/like--v1.png",
+    likedImageUrl: "https://img.icons8.com/ios-glyphs/90/fa314a/like--v1.png",
   },
   {
     name: "Comment",
@@ -27,13 +29,38 @@ const postFotterIcons = [
 ];
 
 const Post = ({ post }) => {
+  const handleLike = (post) => {
+    const currentLikeStatus = !post.likes_by_users.includes(
+      firebase.auth().currentUser.email
+    );
+
+    db.collection("users")
+      .doc(post.owner_email)
+      .collection("posts")
+      .doc(post.id)
+      .update({
+        likes_by_users: currentLikeStatus
+          ? firebase.firestore.FieldValue.arrayUnion(
+              firebase.auth().currentUser.email
+            )
+          : firebase.firestore.FieldValue.arrayRemove(
+              firebase.auth().currentUser.email
+            ),
+      })
+      .then(() => {
+        console.log("document successfully updated");
+      })
+      .catch((error) => {
+        console.error("error updating document:", error);
+      });
+  };
   return (
     <View style={{ marginBottom: 30 }}>
       <Divider width={1} orientation="vertical" />
       <PostHeader post={post} />
       <PostImage post={post} />
       <View>
-        <PostFooter />
+        <PostFooter post={post} handleLike={handleLike} />
         <Likes post={post} />
         <Caption post={post} />
         <CommentSection post={post} />
@@ -71,10 +98,19 @@ const PostImage = ({ post }) => (
   </View>
 );
 
-const PostFooter = ({ post }) => (
+const PostFooter = ({ handleLike, post }) => (
   <View style={{ flexDirection: "row" }}>
     <View style={styles.leftFooterIconsContainer}>
-      <Icon imgStyle={styles.footerIcon} imgUrl={postFotterIcons[0].imageUrl} />
+      <TouchableOpacity onPress={() => handleLike(post)}>
+        <Image
+          style={styles.footerIcon}
+          source={{
+            uri: post.likes_by_users.includes(firebase.auth().currentUser.email)
+              ? postFotterIcons[0].likedImageUrl
+              : postFotterIcons[0].imageUrl,
+          }}
+        />
+      </TouchableOpacity>
       <Icon imgStyle={styles.footerIcon} imgUrl={postFotterIcons[1].imageUrl} />
       <Icon
         imgStyle={[styles.footerIcon, styles.shareIcon]}
@@ -97,7 +133,7 @@ const Icon = ({ imgStyle, imgUrl }) => (
 const Likes = ({ post }) => (
   <View style={{ flexDirection: "row", marginTop: 4 }}>
     <Text style={{ color: "white", fontWeight: "600" }}>
-      {post.likes.toLocaleString("en")} likes
+      {post.likes_by_users.length.toLocaleString("en")} likes
     </Text>
   </View>
 );
